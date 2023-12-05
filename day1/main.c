@@ -25,7 +25,6 @@ int64_t add_values(FILE* ptr) {
     return value;
 }
 
-// Driver code
 int32_t main()
 {
     FILE* ptr = fopen("document.txt", "r");
