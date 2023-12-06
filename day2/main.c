@@ -19,31 +19,41 @@ typedef struct {
 
 enum colour_numbers {blue, red, green};
 
-uint32_t check_cubes(FILE* ptr, cube_colours limit, lookup_t words[]) {
+uint32_t get_digit(char line_buffer[], const int32_t index) {
+    uint32_t value = 0;
+    if (line_buffer[index-3] == ' ') {
+        value = digittoint(line_buffer[index-2]);
+    } else {
+        value = digittoint(line_buffer[index-3]) * 10 + digittoint(line_buffer[index-2]);
+    }
+    return value;
+}
+
+uint32_t check_cubes(FILE* ptr, const cube_colours limit, lookup_t words[]) {
     char file_buffer[MAXLINE];
     uint32_t sum_game_id = 0, current_game_id = 1;
     cube_colours colours = {0,0,0};
     while (!feof(ptr)) {
         bool is_valid = true;
         fgets(file_buffer, MAXLINE, ptr);
-        for (int32_t i = 0; i < MAXLINE && file_buffer[i] != '\0'  && is_valid == true; i++) {
+        for (int32_t i = 0; file_buffer[i] != '\0' && is_valid == true; i++) {
             for (int32_t j = 0; j < 3; j++) {
                 if (strncmp(words[j].word, &file_buffer[i], strlen(words[j].word)) == 0) {
                     switch (words[j].number) {
                         case blue:
-                            colours.blue = file_buffer[i-3] == ' ' ? digittoint(file_buffer[i-2]) : digittoint(file_buffer[i-3]) * 10 + digittoint(file_buffer[i-2]);
+                            colours.blue = get_digit(file_buffer, i);
                             if (colours.blue > limit.blue) {
                                 is_valid = false;
                             }
                             break;
                         case red:
-                            colours.red = file_buffer[i-3] == ' ' ? digittoint(file_buffer[i-2]) : digittoint(file_buffer[i-3]) * 10 + digittoint(file_buffer[i-2]);
+                            colours.red = get_digit(file_buffer, i);
                             if (colours.red > limit.red) {
                                 is_valid = false;
                             }
                             break;
                         case green:
-                            colours.green = file_buffer[i-3] == ' ' ? digittoint(file_buffer[i-2]) : digittoint(file_buffer[i-3]) * 10 + digittoint(file_buffer[i-2]);
+                            colours.green = get_digit(file_buffer, i);
                             if (colours.green > limit.green) {
                                 is_valid = false;
                             }
@@ -64,7 +74,6 @@ uint32_t check_cubes(FILE* ptr, cube_colours limit, lookup_t words[]) {
 
 int32_t main() {
     const cube_colours colour_limit = {12, 13, 14};    // Limit of colored cubes to check for
-
     const lookup_t words[] = {    // Words to check for
         {"blue", blue},
         {"red", red},
