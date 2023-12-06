@@ -24,4 +24,4 @@ if(NOT EXISTS ${SOURCE_DIR})
 endif()
 
 # Add the main.c file from the specified directory
-add_executable(MyExecutable ${SOURCE_DIR}/main.c)
+add_executable(${PROJECT_NAME} ${SOURCE_DIR}/main.c)
