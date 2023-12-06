@@ -26,7 +26,6 @@ uint32_t check_cubes(FILE* ptr, cube_colours limit, lookup_t words[]) {
     while (!feof(ptr)) {
         bool is_valid = true;
         fgets(file_buffer, MAXLINE, ptr);
-        printf("%s", file_buffer);
         for (int32_t i = 0; i < MAXLINE && file_buffer[i] != '\0'  && is_valid == true; i++) {
             for (int32_t j = 0; j < 3; j++) {
                 if (strncmp(words[j].word, &file_buffer[i], strlen(words[j].word)) == 0) {
@@ -76,6 +75,6 @@ int32_t main() {
         printf("Error, can't read file content!\n");
         return -1;
     }
-    printf("\nisvalid? %d", check_cubes(ptr, colour_limit, words));
+    printf("\nSum: %d", check_cubes(ptr, colour_limit, words));
     return 0;
 }
