@@ -13,7 +13,6 @@ int64_t check_digits(FILE* ptr) {
 
     while (!feof(ptr)) {
         fgets(buffer, MAX, ptr);
-        printf("Line to check: %s", buffer);
         for (int32_t i = 0; i < MAX; i++) {
             if (isdigit(buffer[i])) {   // Check if there is a calibration digit
                 if (first_value == true) {
