@@ -8,7 +8,6 @@
 
 typedef struct {
     char* word;
-    uint32_t digit;
 } lookup_t;
 
 uint32_t check_digits(FILE* ptr, const lookup_t *table) {
@@ -26,13 +25,13 @@ uint32_t check_digits(FILE* ptr, const lookup_t *table) {
                 }
                 digits[1] = digittoint(buffer[i]);
                 } else {    // Check if there is a "character digit"
-                    for (uint32_t j = 0; j < 10; j++) {
+                    for (uint32_t j = 0; j < 9; j++) {
                         if (strncmp(table[j].word, &buffer[i], strlen(table[j].word)) == 0) {
                             if (first_value == true) {
-                                digits[0] = table[j].digit;
+                                digits[0] = j+1;
                                 first_value = false;
                             }
-                            digits[1] = table[j].digit;
+                            digits[1] = j+1;
                             break;
                         }
                     }
@@ -55,16 +54,15 @@ int32_t main() {
     }
 
     const lookup_t table[] = {
-        {"one", 1},
-        {"two", 2},
-        {"three", 3},
-        {"four", 4},
-        {"five", 5},
-        {"six", 6},
-        {"seven", 7},
-        {"eight", 8},
-        {"nine", 9},
-        {"zero", 0}
+        {"one"},
+        {"two"},
+        {"three"},
+        {"four"},
+        {"five"},
+        {"six"},
+        {"seven"},
+        {"eight"},
+        {"nine"}
     };
 
     printf("Sum of calibration values: %d\n", check_digits(ptr, table));
