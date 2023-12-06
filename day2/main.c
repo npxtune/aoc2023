@@ -73,6 +73,6 @@ int32_t main() {
         printf("Error, can't read file content!\n");
         return -1;
     }
-    check_cubes(ptr, {12, 13, 14}, words);
+    check_cubes(ptr, (cube_colours){12, 13, 14}, words);
     return 0;
 }
