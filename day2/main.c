@@ -14,27 +14,31 @@ uint32_t parse_digit(char line_buffer[], const int32_t index) {   // "Parse" the
     return digittoint(line_buffer[index-3]) * 10 + digittoint(line_buffer[index-2]);
 }
 
+void check_word(char* file_buffer, const lookup_t* words, cube_colours* max_digit, const int32_t i) {
+    for (int32_t j = 0; j < 3; j++) {
+        if (strncmp(words[j].word, &file_buffer[i], strlen(words[j].word)) == 0) {
+            const uint32_t current_digit = parse_digit(file_buffer, i);
+            switch (j) {
+                case 0: // blue
+                    max_digit->blue = fmax(current_digit, max_digit->blue);
+                    break;
+                case 1: // red
+                    max_digit->red = fmax(current_digit, max_digit->red);
+                    break;
+                case 2: // green
+                    max_digit->green = fmax(current_digit, max_digit->green);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+}
+
 cube_colours get_digit(char file_buffer[], lookup_t words[]) {
     cube_colours max_digit = {0,0,0};
     for (int32_t i = 0; file_buffer[i] != '\0'; i++) {  // Check the entire line in the file buffer for matching words
-        for (int32_t j = 0; j < 3; j++) {
-            if (strncmp(words[j].word, &file_buffer[i], strlen(words[j].word)) == 0) {
-                const uint32_t current_digit = parse_digit(file_buffer, i);
-                switch (j) {
-                    case 0: // blue
-                        max_digit.blue = fmax(current_digit, max_digit.blue);
-                    break;
-                    case 1: // red
-                        max_digit.red = fmax(current_digit, max_digit.red);
-                    break;
-                    case 2: // green
-                        max_digit.green = fmax(current_digit, max_digit.green);
-                    break;
-                    default:
-                        break;
-                }
-            }
-        }
+        check_word(file_buffer, words, &max_digit, i);
     }
     return max_digit;
 }
