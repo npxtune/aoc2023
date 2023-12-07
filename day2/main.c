@@ -14,32 +14,36 @@ uint32_t parse_digit(char line_buffer[], const int32_t index) {   // "Parse" the
     return digittoint(line_buffer[index-3]) * 10 + digittoint(line_buffer[index-2]);
 }
 
-cube_colours get_digit(char file_buffer[], lookup_t words[]) {
-    cube_colours max_digit = {0,0,0};
-    for (int32_t i = 0; file_buffer[i] != '\0'; i++) {  // Check the entire line in the file buffer for matching words
-        for (int32_t j = 0; j < 3; j++) {
-            if (strncmp(words[j].word, &file_buffer[i], strlen(words[j].word)) == 0) {
-                const uint32_t current_digit = parse_digit(file_buffer, i);
-                switch (j) {
-                    case 0: // blue
-                        max_digit.blue = fmax(current_digit, max_digit.blue);
+void check_word(char* file_buffer, const lookup_t* words, cube_colours* max_digit, const int32_t index) {
+    for (int32_t i = 0; i < 3; i++) {
+        if (strncmp(words[i].word, &file_buffer[index], strlen(words[i].word)) == 0) {
+            const uint32_t current_digit = parse_digit(file_buffer, index);
+            switch (i) {
+                case 0: // blue
+                    max_digit->blue = fmax(current_digit, max_digit->blue);
                     break;
-                    case 1: // red
-                        max_digit.red = fmax(current_digit, max_digit.red);
+                case 1: // red
+                    max_digit->red = fmax(current_digit, max_digit->red);
                     break;
-                    case 2: // green
-                        max_digit.green = fmax(current_digit, max_digit.green);
+                case 2: // green
+                    max_digit->green = fmax(current_digit, max_digit->green);
                     break;
-                    default:
-                        break;
-                }
+                default:
+                    break;
             }
         }
+    }
+}
+
+cube_colours get_digit(char* file_buffer, const lookup_t* words) {
+    cube_colours max_digit = {0,0,0};
+    for (int32_t i = 0; file_buffer[i] != '\0'; i++) {
+        check_word(file_buffer, words, &max_digit, i);  // Check the entire line in the file buffer for matching words
     }
     return max_digit;
 }
 
-void check_input(FILE* ptr, const cube_colours limit, lookup_t words[]) {
+void check_input(FILE* ptr, const cube_colours limit, const lookup_t* words) {
     uint32_t sum_game_id = 0, current_game_id = 1, game_powers = 0;
     while (!feof(ptr)) {
         char* file_buffer = fgets(file_buffer, MAXLINE, ptr);
