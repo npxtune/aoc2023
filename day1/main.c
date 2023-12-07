@@ -46,7 +46,7 @@ uint32_t check_digits(FILE* ptr, const lookup_t *table) {
     return value;
 }
 
-int32_t main() {
+int main() {
     FILE* ptr = fopen("input", "r");
     if (NULL == ptr) {
         printf("Error, can't read file content\n");

@@ -57,7 +57,7 @@ void check_input(FILE* ptr, const cube_colours limit, const lookup_t* words) {
     printf("\nSum: %d\n", sum_game_id);
 }
 
-int32_t main() {
+int main() {
     FILE* ptr = fopen("input", "r");
     if (ptr == NULL) {
         printf("Error, can't read file content!\n");
