@@ -27,7 +27,7 @@ void check_cubes(FILE* ptr, const cube_colours limit, lookup_t words[]) {
     char file_buffer[MAXLINE];
     uint32_t sum_game_id = 0, current_game_id = 1, game_powers = 0;
     while (!feof(ptr)) {
-        cube_colours minimum_digit = {0,0,0};
+        cube_colours max_digit = {0,0,0};
         fgets(file_buffer, MAXLINE, ptr);
         for (int32_t i = 0; file_buffer[i] != '\0'; i++) {
             for (int32_t j = 0; j < 3; j++) {
@@ -35,13 +35,13 @@ void check_cubes(FILE* ptr, const cube_colours limit, lookup_t words[]) {
                     const uint32_t current_digit = get_digit(file_buffer, i);
                     switch (j) {
                         case 0: // blue
-                            minimum_digit.blue = fmax(current_digit, minimum_digit.blue);
+                            max_digit.blue = fmax(current_digit, max_digit.blue);
                             break;
                         case 1: // red
-                            minimum_digit.red = fmax(current_digit, minimum_digit.red);
+                            max_digit.red = fmax(current_digit, max_digit.red);
                             break;
                         case 2: // green
-                            minimum_digit.green = fmax(current_digit, minimum_digit.green);
+                            max_digit.green = fmax(current_digit, max_digit.green);
                             break;
                         default:
                             break;
@@ -49,10 +49,10 @@ void check_cubes(FILE* ptr, const cube_colours limit, lookup_t words[]) {
                 }
             }
         }
-        if (minimum_digit.red <= limit.red && minimum_digit.blue <= limit.blue && minimum_digit.green <= limit.green) {
+        if (max_digit.red <= limit.red && max_digit.blue <= limit.blue && max_digit.green <= limit.green) {
             sum_game_id += current_game_id++;
         }
-        game_powers += minimum_digit.red * minimum_digit.green * minimum_digit.blue;
+        game_powers += max_digit.red * max_digit.green * max_digit.blue;
     }
     printf("\nPower: %d", game_powers);
     printf("\nSum: %d\n", sum_game_id);
