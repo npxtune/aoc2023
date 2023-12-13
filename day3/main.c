@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <ctype.h>
+#include <string.h>
+#include <stdlib.h>
 #define MAXLINE 100
 #define PERIOD '.'
 
@@ -17,17 +19,38 @@ int32_t get_line_length(FILE *file) {
     return length;
 }
 
+int32_t check_part() {
+    int32_t output = 0;
+
+    return output;
+}
+
 int32_t part_number_sum(FILE *file) {
     int32_t line_length = get_line_length(file);
-    char buffer[MAXLINE], symbol[line_length];
-    while (fgets(buffer, MAXLINE, file) != NULL) {
-        for (int i = 0; i < line_length; ++i) {
-            buffer[i] != PERIOD ? printf("%c", buffer[i]) : 0;
+    char buffer[MAXLINE];
+    fgets(buffer, MAXLINE, file);
+    fgets(buffer, MAXLINE, file);
+    for (int i = 0; i < line_length; ++i) {
+        if (!isnumber(buffer[i]) && buffer[i] != '.') {
+            printf("\t%c\n", buffer[i]);
+            fseek(file, 0+i-1, SEEK_SET);
+            printf("%c\t%c\t%c\n", fgetc(file),fgetc(file),fgetc(file));
+            fseek(file, (line_length+1)*2+i-1, SEEK_SET);
+            printf("%c\t%c\t%c\n", fgetc(file),fgetc(file),fgetc(file));
+            break;
         }
-        printf("\n");
     }
     return 0;
 }
+//    while (fgets(buffer, MAXLINE, file) != NULL) {
+//        for (int i = 0; i < line_length; ++i) {
+//            if (!isnumber(buffer[i]) && buffer[i] != '.') {
+//                printf("%c\n", buffer[i]);
+//            }
+//        }
+//    }
+//    return 0;
+//}
 
 int main(void) {
     FILE *file = fopen("../day3/input", "r");
@@ -36,7 +59,7 @@ int main(void) {
         return -1;
     }
 
-    printf("Sum: %d\n", part_number_sum(file));
+    printf("\nSum: %d\n", part_number_sum(file));
     fclose(file);
     return 0;
 }
