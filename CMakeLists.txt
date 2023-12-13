@@ -8,7 +8,7 @@ set(CMAKE_CXX_COMPILER clang)
 option(DAY "Select the day directory for compilation" "")
 
 #   Select day directory to be used for compilation
-set(DAY day2)
+set(DAY day3)
 
 # Check if DAY option is provided
 if(NOT DAY)

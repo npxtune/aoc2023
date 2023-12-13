@@ -15,7 +15,7 @@ uint32_t parse_digit(char line_buffer[], const int32_t index) {   // "Parse" the
 }
 
 void check_word(char* file_buffer, const lookup_t* words, cube_colours* max_digit, const int32_t index) {
-    for (int32_t i = 0; i < 3; i++) {
+    for (uint16_t i = 0; i < 3; i++) {
         if (strncmp(words[i].word, &file_buffer[index], strlen(words[i].word)) == 0) {
             const uint32_t current_digit = parse_digit(file_buffer, index);
             switch (i) {
