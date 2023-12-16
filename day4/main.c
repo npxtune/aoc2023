@@ -1,9 +1,10 @@
 #include <stdio.h>
 #include <ctype.h>
 #include "day4.h"
-#define MAXLINE 210
+#define ARRAY_LENGTH 210
+#define START_POSITION 8
 
-match_Tuple get_matches(const char *buffer, const int32_t *winning_num, int32_t index, int32_t pos) {
+match_Tuple compare_numbers(const char *buffer, const int32_t *winning_num, int32_t index, int32_t pos) {
     match_Tuple matches = {1, 0};
     for (int32_t i = pos; buffer[i] != '\0'; ++i) {
         if (isnumber(buffer[i])) {
@@ -24,37 +25,41 @@ match_Tuple get_matches(const char *buffer, const int32_t *winning_num, int32_t 
     return matches;
 }
 
-void check_card(FILE *file) {
-    match_Tuple values = {0,0};
-    int32_t winning_num[MAXLINE], card_instances[MAXLINE], card = 0;
-    clear_array(card_instances, MAXLINE);
-    char buffer[MAXLINE];
-    for (; fgets(buffer, MAXLINE, file) != NULL; card++) {
-        int32_t index = 0, pos = 8;
-        for (; pos < MAXLINE && buffer[pos] != '|'; ++pos) {
-            if (isnumber(buffer[pos])) {
-                int32_t length = 1;
-                winning_num[index] = buffer[pos] - '0';
-
-                if (isnumber(buffer[pos + 1])) {
-                    winning_num[index] = winning_num[index] * 10 + buffer[pos + length++] - '0';
-                }
-                pos+= length - 1;
-                index++;
+match_Tuple get_matches(const char *buffer) {
+    int32_t winning_num[ARRAY_LENGTH], index = 0, pos = START_POSITION;
+    for (; pos < ARRAY_LENGTH && buffer[pos] != '|'; ++pos) {
+        if (isnumber(buffer[pos])) {
+            winning_num[index++] = buffer[pos] - '0';
+            if (isnumber(buffer[pos + 1])) {
+                winning_num[index-1] = winning_num[index-1] * 10 + buffer[++pos] - '0';
             }
         }
-        match_Tuple matches = get_matches(buffer, winning_num, index, pos);
-        values.part1 += matches.part1;
+    }
+    return compare_numbers(buffer, winning_num, index, pos);
+}
+
+void check_card(FILE *file) {
+    match_Tuple points = {0, 0};
+    int32_t card_instances[ARRAY_LENGTH];
+    clear_array(card_instances, ARRAY_LENGTH);
+    char buffer[ARRAY_LENGTH];
+    for (int32_t card = 0; fgets(buffer, ARRAY_LENGTH, file) != NULL; card++) {
+        match_Tuple matches = get_matches(buffer);
+        points.part1 += matches.part1;
         for (int32_t i = card+1; i < card+matches.part2+1; ++i) {
             card_instances[i] += card_instances[card]+1;
         }
-        values.part2 += card_instances[card]+1;
+        points.part2 += card_instances[card] + 1;
     }
-    printf("Part1: %d\nPart2: %d\n", values.part1, values.part2);
+    printf("Part1: %d\nPart2: %d\n", points.part1, points.part2);
 }
 
-int main(void) {
-    FILE *file = fopen("../day4/input", "r");
+int main(int argc, char *argv[]) {
+    if (argc != 2) {
+        printf("Usage: %s <filename>\n", argv[0]);
+        return -1;
+    }
+    FILE *file = fopen(argv[1], "r");
     if (file == NULL) {
         return -1;
     }
