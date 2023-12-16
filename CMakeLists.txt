@@ -3,6 +3,8 @@ project(aoc2023 C)
 
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_COMPILER clang)
+set(CMAKE_CXX_FLAGS "-Wall -Wextra")
+set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 
 # Define an option to specify the day
 option(DAY "Select the day directory for compilation" "")
